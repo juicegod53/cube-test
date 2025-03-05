@@ -12,44 +12,94 @@ body {
 * {
     color: white;
     font-family: Roboto, sans-serif;
+    font-weight: normal;
     padding: 0;
     margin: 0;
 }
 
 .title {
     text-align: center;
-    margin: 30px 0;
-    font-size: 20px;
+    margin: 35px 0;
+    font-size: 30px;
+}
+
+.boxes, .algs {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .boxes {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: space-around;
 }
 
-.box {
+.algs {
+    margin-left: 10px;
+    gap: 20px;
+}
+
+.box, .alg {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    width: 40vh;
-    height: 30vh;
-    margin-bottom: 3vh;
+}
+
+.box {
+    width: 400px;
+    height: 300px;
+    margin-bottom: 30px;
+}
+
+.alg {
+    width: 250px;
+    height: 250px;
 }
 
 .box:hover {
     transform: scale(1.05);
-    -webkit-transition: transform 0.15s ease-in-out;
+    transition: transform 0.15s ease-in-out;
+}
+
+.box:not(:hover) {
+    transform: scale(1);
+    transition: transform 0.15s ease-in-out;
 }
 
 .box-img {
-    width: 20vh;
-    height: 20vh;
+    width: 180px;
+    height: 180px;
     margin-bottom: 30px;
 }
 
-.box-text {
+.alg-img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+.box-text, .alg-text, .alg-name {
     font-size: 18px;
 }
+
+.alg-text {
+    margin-bottom: 10px;
+}
+
+a {
+   text-decoration: none;
+}
+
+.description {
+    font-size: 18px;
+    width: 80%;
+    margin-left: 10px;
+    margin-bottom: 30px;
+}
+
+.subheading {
+    margin-left: 10px;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
