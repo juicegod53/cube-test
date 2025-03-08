@@ -113,3 +113,9 @@ footer {
     padding-bottom: 30px;
 }
 
+#timer-alg {
+    text-align: center;
+    font-size: 30px;
+    margin-top: 50px;
+    word-spacing: 10px;
+}
