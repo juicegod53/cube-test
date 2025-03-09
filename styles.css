@@ -115,7 +115,18 @@ footer {
 
 #timer-alg {
     text-align: center;
-    font-size: 30px;
-    margin-top: 50px;
+    font-size: 25px;
+    margin-top: 80px;
     word-spacing: 10px;
+}
+
+#timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
+}
+
+#timer-text {
+    font-size: 80px;
 }

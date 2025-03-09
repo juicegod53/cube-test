@@ -1,3 +1,7 @@
+let text_box = document.getElementById("timer-alg")
+let timer_text = document.getElementById("timer-text");
+
+
 function generate_alg() {
     const moves = ["L", "R", "B", "F", "D", "U"];
     let algorithm = [];
@@ -26,8 +30,19 @@ function generate_alg() {
 
         algorithm.push(move)
     }
-    text_box = document.getElementById('timer-alg')
-    text_box.innerText = algorithm.join(' ')
+    text_box.innerText = algorithm.join(" ")
 }
 
 generate_alg()
+
+window.onkeydown = function(e) {
+    if (e.key == " ") {
+        timer_text.style.color = "red";
+    }
+}
+
+window.onkeyup = function(e) {
+    if (e.key == " ") {
+        timer_text.style.color = "white";
+    }
+}
