@@ -1,7 +1,9 @@
 let active = false;
 let timer_text = document.getElementById("timer-text")
 let alg_text = document.getElementById("timer-alg")
+let average_text = document.getElementById("average-text")
 let sessionTimes = [];
+let keytrigger = "keyup";
 
 let times = document.getElementById("times")
 
@@ -40,11 +42,15 @@ function generate_alg() {
 function calculateTime(event) {
     if (event.key == " ") {
         if (active == false) {
+            alg_text.style.opacity = '0'
             startTime = new Date
             active = true
+            keytrigger = "keydown"
             timerInterval = setInterval(updateTimer, 100)
         } else {
+            alg_text.style.opacity = '1'
             clearInterval(timerInterval)
+            keytrigger = "keyup"
             finishTime = new Date
             timeTaken = Math.round(((finishTime - startTime) * 0.001) * 100) / 100
             timeTakenString = timeTaken.toFixed(2)
@@ -67,9 +73,15 @@ function updateSessionTimes(time, algorithm) {
     const timeItem = document.createElement("li")
     timeItem.innerText = sessionTimes[sessionTimes.length - 1][0] + ": " + sessionTimes[sessionTimes.length - 1][1]
     times.appendChild(timeItem)
+    let sum = 0;
+    for (let i = 0; i < sessionTimes.length; i++) {
+        sum += sessionTimes[i][0]
+    }
+    average = (Math.round(sum / sessionTimes.length * 100) / 100).toFixed(2)
+    average_text.innerText = 'Session average: ' + average
 }
 
 generate_alg()
 
-window.addEventListener("keypress", calculateTime)
+window.addEventListener(keytrigger, calculateTime)
 

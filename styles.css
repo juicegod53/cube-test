@@ -118,15 +118,31 @@ footer {
     font-size: 25px;
     margin-top: 80px;
     word-spacing: 10px;
+    transition: 0.5s opacity;
 }
 
 #timer-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30vh;
+    height: 50vh;
 }
 
 #timer-text {
-    font-size: 60px;
+    font-size: 70px;
+}
+
+#times-container {
+    height: 30vh;
+}
+
+#average-text {
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 24px;
+}
+
+#times {
+    font-size: 20px;
+    text-align: center;
 }
