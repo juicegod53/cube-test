@@ -120,7 +120,7 @@ footer {
     word-spacing: 10px;
 }
 
-#timer {
+#timer-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -128,5 +128,5 @@ footer {
 }
 
 #timer-text {
-    font-size: 80px;
+    font-size: 60px;
 }
