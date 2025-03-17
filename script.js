@@ -41,7 +41,7 @@ function generate_alg() {
 }
 
 function calculateTime(event) {
-    if (event.key == " ") {
+    if (event.key == " " || active == true) {
         if (active == false) {
             hide()
             startTime = new Date
@@ -86,6 +86,9 @@ function updateSessionTimes(time, algorithm) {
     const timeItem = document.createElement("li")
     timeItem.innerText = sessionTimes[sessionTimes.length - 1][0] + ": " + sessionTimes[sessionTimes.length - 1][1]
     times.appendChild(timeItem)
+    if (times.children.length == 6) {
+        times.removeChild(times.firstElementChild)
+    }
     let sum = 0;
     for (let i = 0; i < sessionTimes.length; i++) {
         sum += sessionTimes[i][0]

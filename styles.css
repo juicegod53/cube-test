@@ -150,3 +150,7 @@ footer {
     opacity: 1;
     transition: 0.5s opacity;
 }
+
+li {
+    margin-bottom: 10px;
+}
