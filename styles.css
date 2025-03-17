@@ -118,7 +118,6 @@ footer {
     font-size: 25px;
     margin-top: 80px;
     word-spacing: 10px;
-    transition: 0.5s opacity;
 }
 
 #timer-container {
@@ -145,4 +144,9 @@ footer {
 #times {
     font-size: 20px;
     text-align: center;
+}
+
+#timer-alg, #times-container, #average-text {
+    opacity: 1;
+    transition: 0.5s opacity;
 }

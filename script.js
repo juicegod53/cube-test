@@ -2,6 +2,7 @@ let active = false;
 let timer_text = document.getElementById("timer-text")
 let alg_text = document.getElementById("timer-alg")
 let average_text = document.getElementById("average-text")
+let times_container = document.getElementById("times-container")
 let sessionTimes = [];
 let keytrigger = "keyup";
 
@@ -42,13 +43,13 @@ function generate_alg() {
 function calculateTime(event) {
     if (event.key == " ") {
         if (active == false) {
-            alg_text.style.opacity = '0'
+            hide()
             startTime = new Date
             active = true
             keytrigger = "keydown"
             timerInterval = setInterval(updateTimer, 100)
         } else {
-            alg_text.style.opacity = '1'
+            show()
             clearInterval(timerInterval)
             keytrigger = "keyup"
             finishTime = new Date
@@ -60,6 +61,18 @@ function calculateTime(event) {
             generate_alg()
         }
     }
+}
+
+function hide() {
+    alg_text.style.opacity = '0'
+    average_text.style.opacity = '0'
+    times_container.style.opacity = '0'
+}
+
+function show() {
+    alg_text.style.opacity = '1'
+    average_text.style.opacity = '1'
+    times_container.style.opacity = '1'
 }
 
 function updateTimer() {
