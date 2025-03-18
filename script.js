@@ -20,9 +20,15 @@ function generate_alg() {
         let move = moves[Math.floor(Math.random()*moves.length)];
         if (algorithm.length >= 2) {
             last_two_moves = algorithm.slice(Math.max(algorithm.length - 2, 0));
+            for (let y = 0; y < 2; y++) {
+                last_two_moves[y] = (last_two_moves[y]).charAt(0)
+            }
+            console.log(last_two_moves)
         }
-            if (last_move_checks.includes(last_two_moves.sort())) {
-                move_double = last_two_moves[0]
+        last_two_moves_store = last_two_moves
+        last_two_moves.sort()
+            if (last_move_checks.includes(last_two_moves)) {
+                move_double = last_two_moves_store[0]
             }
         while ((move == last_move_axis) || (move == move_double)) {
             move = moves[Math.floor(Math.random()*moves.length)];
@@ -41,17 +47,21 @@ function generate_alg() {
 }
 
 function calculateTime(event) {
-    if (event.key == " " || active == true) {
+    if (event.key == " ") {
         if (active == false) {
             hide()
             startTime = new Date
             active = true
+            window.removeEventListener(keytrigger, calculateTime)
             keytrigger = "keydown"
+            window.addEventListener(keytrigger, calculateTime)
             timerInterval = setInterval(updateTimer, 100)
         } else {
             show()
             clearInterval(timerInterval)
+            window.removeEventListener(keytrigger, calculateTime)
             keytrigger = "keyup"
+            window.addEventListener(keytrigger, delay)
             finishTime = new Date
             timeTaken = Math.round(((finishTime - startTime) * 0.001) * 100) / 100
             timeTakenString = timeTaken.toFixed(2)
@@ -61,6 +71,11 @@ function calculateTime(event) {
             generate_alg()
         }
     }
+}
+
+function delay() {
+    window.removeEventListener(keytrigger, delay)
+    window.addEventListener(keytrigger, calculateTime)
 }
 
 function hide() {
