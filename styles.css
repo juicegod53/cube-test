@@ -116,7 +116,6 @@ footer {
 #timer-alg {
     text-align: center;
     font-size: 25px;
-    margin-top: 80px;
     word-spacing: 10px;
 }
 
@@ -153,4 +152,27 @@ footer {
 
 li {
     margin-bottom: 10px;
+}
+
+#puzzle-container {
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#puzzles {
+    background-color: rgb(35, 34, 34);
+    height: 40px;
+    width: 200px;
+    color: white;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    font-size: 22px;
+    padding-left: 5px;
+}
+
+::selection {
+    color: black;
+    background-color: white;
 }

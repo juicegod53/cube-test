@@ -5,25 +5,32 @@ let average_text = document.getElementById("average-text")
 let times_container = document.getElementById("times-container")
 let sessionTimes = [];
 let keytrigger = "keyup";
+let puzzle = "3x3";
 
 let times = document.getElementById("times")
 
-function generate_alg() {
+function generate_alg(puzzle) {
     const moves = ["L", "R", "B", "F", "D", "U"];
     let algorithm = [];
     let last_move_axis;
     let last_move_checks = [["L","R"], ["B", "F"], ["D", "U"]];
     let move_double;
     let last_two_moves = [];
+    let move_count = 19;
 
-    for (let x = 0; x < 19; x++) {
+    if (puzzle == "3x3") {
+        move_count = 19;
+    } else if (puzzle == "2x2") {
+        move_count = 9;
+    }
+
+    for (let x = 0; x < move_count; x++) {
         let move = moves[Math.floor(Math.random()*moves.length)];
         if (algorithm.length >= 2) {
             last_two_moves = algorithm.slice(Math.max(algorithm.length - 2, 0));
             for (let y = 0; y < 2; y++) {
                 last_two_moves[y] = (last_two_moves[y]).charAt(0)
             }
-            console.log(last_two_moves)
         }
         last_two_moves_store = last_two_moves
         last_two_moves.sort()
@@ -66,9 +73,9 @@ function calculateTime(event) {
             timeTaken = Math.round(((finishTime - startTime) * 0.001) * 100) / 100
             timeTakenString = timeTaken.toFixed(2)
             active = false
-            updateSessionTimes(timeTaken, alg_text.innerText)
+            updateSessionTimes(timeTaken, alg_text.innerText, puzzle)
             timer_text.innerText = timeTakenString
-            generate_alg()
+            generate_alg(puzzle)
         }
     }
 }
@@ -96,8 +103,9 @@ function updateTimer() {
     timer_text.innerText = timeShown
 }
 
-function updateSessionTimes(time, algorithm) {
-    sessionTimes.push([time, algorithm])
+function updateSessionTimes(time, algorithm, puzzle) {
+    sessionTimes.push([time, algorithm, puzzle])
+    console.log(sessionTimes)
     const timeItem = document.createElement("li")
     timeItem.innerText = sessionTimes[sessionTimes.length - 1][0] + ": " + sessionTimes[sessionTimes.length - 1][1]
     times.appendChild(timeItem)
@@ -112,7 +120,19 @@ function updateSessionTimes(time, algorithm) {
     average_text.innerText = 'Session average: ' + average
 }
 
-generate_alg()
+generate_alg(puzzle)
 
 window.addEventListener(keytrigger, calculateTime)
+
+const puzzles = document.getElementById("puzzles")
+puzzles.addEventListener("click", set_puzzle)
+
+function set_puzzle() {
+    new_puzzle = puzzles.options[puzzles.selectedIndex].text
+    if (new_puzzle != puzzle) {
+        generate_alg(new_puzzle)
+        puzzle = new_puzzle
+    }
+}
+
 
