@@ -17,7 +17,9 @@ function generate_alg(puzzle) {
     let last_move_checks = [["L","R"], ["B", "F"], ["D", "U"]];
     let move_double;
     let last_two_moves = [];
+    let last_two_moves_store = "";
     let move_count = 19;
+    let move_double_exists = false
 
     if (puzzle == "3x3") {
         move_count = 19;
@@ -33,12 +35,21 @@ function generate_alg(puzzle) {
                 last_two_moves[y] = (last_two_moves[y]).charAt(0)
             }
         }
-        last_two_moves_store = last_two_moves
+
+        last_two_moves_store = last_two_moves.slice()
         last_two_moves.sort()
-            if (last_move_checks.includes(last_two_moves)) {
-                move_double = last_two_moves_store[0]
-            }
-        while ((move == last_move_axis) || (move == move_double)) {
+
+        let exists = last_move_checks.some(subArray => 
+            subArray.length === last_two_moves.length && subArray.every((val, i) => val === last_two_moves[i])
+        );
+        
+        if (exists) {
+            move_double = last_two_moves_store[0]
+        } else {
+            move_double = "none"
+        }
+        
+        while ((move == last_move_axis) || ((move == move_double) && (move_double != "none"))) {
             move = moves[Math.floor(Math.random()*moves.length)];
         }
         last_move_axis = move
