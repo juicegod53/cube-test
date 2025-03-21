@@ -145,7 +145,7 @@ footer {
     text-align: center;
 }
 
-#timer-alg, #times-container, #average-text {
+#timer-alg, #times-container, #average-text, #puzzles {
     opacity: 1;
     transition: 0.5s opacity;
 }

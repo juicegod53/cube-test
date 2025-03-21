@@ -3,6 +3,7 @@ let timer_text = document.getElementById("timer-text")
 let alg_text = document.getElementById("timer-alg")
 let average_text = document.getElementById("average-text")
 let times_container = document.getElementById("times-container")
+let puzzles = document.getElementById("puzzles")
 let sessionTimes = [];
 let keytrigger = "keyup";
 let puzzle = "3x3";
@@ -89,12 +90,14 @@ function hide() {
     alg_text.style.opacity = '0'
     average_text.style.opacity = '0'
     times_container.style.opacity = '0'
+    puzzles.style.opacity = '0'
 }
 
 function show() {
     alg_text.style.opacity = '1'
     average_text.style.opacity = '1'
     times_container.style.opacity = '1'
+    puzzles.style.opacity = '1'
 }
 
 function updateTimer() {
@@ -124,7 +127,6 @@ generate_alg(puzzle)
 
 window.addEventListener(keytrigger, calculateTime)
 
-const puzzles = document.getElementById("puzzles")
 puzzles.addEventListener("click", set_puzzle)
 
 function set_puzzle() {
