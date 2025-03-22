@@ -19,7 +19,6 @@ function generate_alg(puzzle) {
     let last_two_moves = [];
     let last_two_moves_store = "";
     let move_count = 19;
-    let move_double_exists = false
 
     if (puzzle == "3x3") {
         move_count = 19;
@@ -66,7 +65,7 @@ function generate_alg(puzzle) {
 }
 
 function calculateTime(event) {
-    if (event.key == " ") {
+    if (event.key == " " || active == true) {
         if (active == false) {
             hide()
             startTime = new Date
@@ -92,9 +91,16 @@ function calculateTime(event) {
     }
 }
 
-function delay() {
-    window.removeEventListener(keytrigger, delay)
-    window.addEventListener(keytrigger, calculateTime)
+function delay(event) {
+    if (event.key == " ") {
+        window.removeEventListener(keytrigger, delay)
+        window.addEventListener(keytrigger, calculateTime)
+    } else {
+        if (Date.now() - finishTime >= 500) {
+            window.removeEventListener(keytrigger, delay);
+            window.addEventListener("keydown", calculateTime);
+        }
+    }
 }
 
 function hide() {
@@ -120,18 +126,18 @@ function updateTimer() {
 function updateSessionTimes(time, algorithm, puzzle) {
     sessionTimes.push([time, algorithm, puzzle])
     console.log(sessionTimes)
-    const timeItem = document.createElement("li")
-    timeItem.innerText = sessionTimes[sessionTimes.length - 1][0] + ": " + sessionTimes[sessionTimes.length - 1][1]
-    times.appendChild(timeItem)
-    if (times.children.length == 6) {
-        times.removeChild(times.firstElementChild)
-    }
+    // const timeItem = document.createElement("li")
+    // timeItem.innerText = sessionTimes[sessionTimes.length - 1][0] + ": " + sessionTimes[sessionTimes.length - 1][1]
+    // times.prepend(timeItem)
+    // if (times.children.length == 6) {
+    //     times.removeChild(times.lastElementChild)
+    // }
     let sum = 0;
     for (let i = 0; i < sessionTimes.length; i++) {
         sum += sessionTimes[i][0]
     }
     average = (Math.round(sum / sessionTimes.length * 100) / 100).toFixed(2)
-    average_text.innerText = 'Session average: ' + average
+    // average_text.innerText = 'Session average: ' + average
 }
 
 generate_alg(puzzle)
@@ -147,5 +153,3 @@ function set_puzzle() {
         puzzle = new_puzzle
     }
 }
-
-
