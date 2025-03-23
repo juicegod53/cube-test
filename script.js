@@ -131,11 +131,20 @@ function updateSessionTimes(time, algorithm, puzzle) {
 
 function updateSessionAverage() {
     let sum = 0;
+    let dnfCounter = 0
     for (let i = 0; i < sessionTimes.length; i++) {
-        sum += sessionTimes[i][0]
+        if (typeof(sessionTimes[i][0]) == "number") {
+            sum += sessionTimes[i][0]
+        } else {
+            dnfCounter = dnfCounter + 1
+        }
     }
-    average = (Math.round(sum / sessionTimes.length * 100) / 100).toFixed(2)
-    average_text.innerText = 'Session average: ' + average
+    if (sessionTimes.length == dnfCounter) {
+        average_text.innerText = "Session average: DNF"
+    } else {
+        average = (Math.round(sum / (sessionTimes.length - dnfCounter) * 100) / 100).toFixed(2)
+        average_text.innerText = 'Session average: ' + average
+    }
 }
 
 function updateTimesShown() {
@@ -146,9 +155,13 @@ function updateTimesShown() {
     plusTwoButton = document.createElement("button")
     plusTwoButton.addEventListener("click", plusTwo)
     plusTwoButton.innerText = '+2'
-    timeItemText.innerText = sessionTimes.length + '.' + ' ' +sessionTimes[sessionTimes.length - 1][0].toFixed(2)
+    dnfButton = document.createElement("button")
+    dnfButton.addEventListener("click", dnf)
+    dnfButton.innerText = 'DNF'
+    timeItemText.innerText = sessionTimes.length + '. ' +sessionTimes[sessionTimes.length - 1][0].toFixed(2)
     timeItem.append(timeItemText)
     timeItemButtons.append(plusTwoButton)
+    timeItemButtons.append(dnfButton)
     timeItem.append(timeItemButtons)
     times.prepend(timeItem)
 }
@@ -156,16 +169,43 @@ function updateTimesShown() {
 function plusTwo(e) {
     const timeItem = e.target.parentNode.parentNode;
     const timeItemText = timeItem.childNodes[0]
+    let startOfTime = 3;
     if (timeItemText.innerText.slice(-4) != "(+2)") {
-        const time = parseFloat(timeItemText.innerText.substring(3))
+        if (timeItemText.innerText.substring(timeItemText.innerText.indexOf("("),timeItemText.innerText.indexOf(")")+1) == "(DNF)") {
+            startOfTime = timeItemText.innerText.indexOf(")") + 2
+        }
+        const time = parseFloat(timeItemText.innerText.substring(startOfTime))
         const newTime = (Math.round((time + 2) * 100) / 100)
-        const position = timeItemText.innerText.substring(0, timeItemText.innerText.indexOf("."))
+        const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
         sessionTimes[parseInt(position)-1][0] = newTime
         console.log(sessionTimes)
-        timeItemText.innerText = position + "." + " " + newTime.toFixed(2) + " (+2)"
-        updateSessionAverage()
+        timeItemText.innerText = position + ". " + newTime.toFixed(2) + " (+2)"
     }
+    updateSessionAverage()
     plusTwoButton.blur()
+}
+
+function dnf(e) {
+    const timeItem = e.target.parentNode.parentNode;
+    const timeItemText = timeItem.childNodes[0]
+    if (timeItemText.innerText.substring(timeItemText.innerText.indexOf("("),timeItemText.innerText.indexOf(")")+1) != "(DNF)") {
+        if (timeItemText.innerText.slice(-4) == "(+2)") {
+            const time = parseFloat(timeItemText.innerText.substring(3))
+            const newTime = (Math.round((time - 2) * 100) / 100)
+            const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
+            sessionTimes[parseInt(position)-1][0] = "DNF (" + newTime + ")"
+            console.log(sessionTimes)
+            timeItemText.innerText = position + ". (DNF) " + newTime.toFixed(2)
+        } else {
+            const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
+            const time = parseFloat(timeItemText.innerText.substring(3))
+            timeItemText.innerText = position + ". (DNF) " + time.toFixed(2)
+            sessionTimes[parseInt(position)-1][0] = "DNF (" + time + ")"
+        }
+
+    }
+    updateSessionAverage()
+    dnfButton.blur()
 }
 
 generate_alg(puzzle)
