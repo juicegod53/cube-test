@@ -96,10 +96,10 @@ function delay(event) {
         window.removeEventListener(keytrigger, delay)
         window.addEventListener(keytrigger, calculateTime)
     } else {
-        if (Date.now() - finishTime >= 500) {
-            window.removeEventListener(keytrigger, delay);
+        window.removeEventListener(keytrigger, delay);
+        setTimeout(() => {
             window.addEventListener("keydown", calculateTime);
-        }
+        }, 100);
     }
 }
 
