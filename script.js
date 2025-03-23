@@ -125,19 +125,47 @@ function updateTimer() {
 
 function updateSessionTimes(time, algorithm, puzzle) {
     sessionTimes.push([time, algorithm, puzzle])
-    console.log(sessionTimes)
-    // const timeItem = document.createElement("li")
-    // timeItem.innerText = sessionTimes[sessionTimes.length - 1][0] + ": " + sessionTimes[sessionTimes.length - 1][1]
-    // times.prepend(timeItem)
-    // if (times.children.length == 6) {
-    //     times.removeChild(times.lastElementChild)
-    // }
+    updateTimesShown()
+    updateSessionAverage()
+}
+
+function updateSessionAverage() {
     let sum = 0;
     for (let i = 0; i < sessionTimes.length; i++) {
         sum += sessionTimes[i][0]
     }
     average = (Math.round(sum / sessionTimes.length * 100) / 100).toFixed(2)
-    // average_text.innerText = 'Session average: ' + average
+    average_text.innerText = 'Session average: ' + average
+}
+
+function updateTimesShown() {
+    const timeItem = document.createElement("li")
+    timeItem.className = "time-item"
+    const timeItemText = document.createElement("p")
+    const timeItemButtons = document.createElement("div")
+    plusTwoButton = document.createElement("button")
+    plusTwoButton.addEventListener("click", plusTwo)
+    plusTwoButton.innerText = '+2'
+    timeItemText.innerText = sessionTimes.length + '.' + ' ' +sessionTimes[sessionTimes.length - 1][0].toFixed(2)
+    timeItem.append(timeItemText)
+    timeItemButtons.append(plusTwoButton)
+    timeItem.append(timeItemButtons)
+    times.prepend(timeItem)
+}
+
+function plusTwo(e) {
+    const timeItem = e.target.parentNode.parentNode;
+    const timeItemText = timeItem.childNodes[0]
+    if (timeItemText.innerText.slice(-4) != "(+2)") {
+        const time = parseFloat(timeItemText.innerText.substring(3))
+        const newTime = (Math.round((time + 2) * 100) / 100)
+        const position = timeItemText.innerText.substring(0, timeItemText.innerText.indexOf("."))
+        sessionTimes[parseInt(position)-1][0] = newTime
+        console.log(sessionTimes)
+        timeItemText.innerText = position + "." + " " + newTime.toFixed(2) + " (+2)"
+        updateSessionAverage()
+    }
+    plusTwoButton.blur()
 }
 
 generate_alg(puzzle)
