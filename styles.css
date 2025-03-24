@@ -195,7 +195,16 @@ footer {
 }
 
 button {
-    height: 25px;
-    width: 50px;
-    background-color: black;
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+    background: none;
+    transition: 0.3s;
+    border: none;
+    margin-right: 20px;
+    font-size: 16px;
+}
+
+button:hover {
+    text-shadow: 0 0 5px white;
 }
