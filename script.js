@@ -180,6 +180,12 @@ function plusTwo(e) {
         sessionTimes[parseInt(position)-1][0] = newTime
         console.log(sessionTimes)
         timeItemText.innerText = position + ". " + newTime.toFixed(2) + " (+2)"
+    } else {
+        const time = parseFloat(timeItemText.innerText.substring(timeItemText.innerText.indexOf(".")+2))
+        const newTime = (Math.round((time - 2) * 100) / 100)
+        const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
+        sessionTimes[parseInt(position)-1][0] = newTime
+        timeItemText.innerText = position + ". " + newTime.toFixed(2)
     }
     updateSessionAverage()
     plusTwoButton.blur()
@@ -194,7 +200,6 @@ function dnf(e) {
             const newTime = (Math.round((time - 2) * 100) / 100)
             const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
             sessionTimes[parseInt(position)-1][0] = "DNF (" + newTime + ")"
-            console.log(sessionTimes)
             timeItemText.innerText = position + ". (DNF) " + newTime.toFixed(2)
         } else {
             const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
@@ -203,6 +208,11 @@ function dnf(e) {
             sessionTimes[parseInt(position)-1][0] = "DNF (" + time + ")"
         }
 
+    } else {
+        const time = timeItemText.innerText.substring(timeItemText.innerText.indexOf(")")+2)
+        const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
+        sessionTimes[parseInt(position)-1][0] = parseFloat(time)
+        timeItemText.innerText = position + ". " + time
     }
     updateSessionAverage()
     dnfButton.blur()
