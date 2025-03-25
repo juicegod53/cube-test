@@ -2,6 +2,9 @@ let active = false;
 let timer_text = document.getElementById("timer-text")
 let alg_text = document.getElementById("timer-alg")
 let average_text = document.getElementById("average-text")
+let ao5_text = document.getElementById("ao5-text")
+let ao12_text = document.getElementById("ao12-text")
+let mo3_text = document.getElementById("mo3-text")
 let times_container = document.getElementById("times-container")
 let puzzles = document.getElementById("puzzles")
 let sessionTimes = [];
@@ -98,7 +101,7 @@ function delay(event) {
     } else {
         window.removeEventListener(keytrigger, delay);
         setTimeout(() => {
-            window.addEventListener("keydown", calculateTime);
+            window.addEventListener(keytrigger, calculateTime);
         }, 100);
     }
 }
@@ -108,6 +111,9 @@ function hide() {
     average_text.style.opacity = '0'
     times_container.style.opacity = '0'
     puzzles.style.opacity = '0'
+    ao5_text.style.opacity = '0'
+    ao12_text.style.opacity = '0'
+    mo3_text.style.opacity = '0'
 }
 
 function show() {
@@ -115,6 +121,9 @@ function show() {
     average_text.style.opacity = '1'
     times_container.style.opacity = '1'
     puzzles.style.opacity = '1'
+    ao5_text.style.opacity = '1'
+    ao12_text.style.opacity = '1'
+    mo3_text.style.opacity = '1'
 }
 
 function updateTimer() {
@@ -131,19 +140,54 @@ function updateSessionTimes(time, algorithm, puzzle) {
 
 function updateSessionAverage() {
     let sum = 0;
-    let dnfCounter = 0
+    let mo3_sum = 0;
+    let ao5_sum = 0;
+    let ao12_sum = 0;
+    let dnfCounter = 0;
+    let ao5_values = []
+    let ao12_values = []
     for (let i = 0; i < sessionTimes.length; i++) {
         if (typeof(sessionTimes[i][0]) == "number") {
+            if (i >= sessionTimes.length - 3) {
+                mo3_sum += sessionTimes[i][0]
+            }
+            if (i >= sessionTimes.length - 5) {
+                ao5_values.push(sessionTimes[i][0])
+            }
+            if (i >= sessionTimes.length - 12) {
+                ao12_values.push(sessionTimes[i][0])
+            }
             sum += sessionTimes[i][0]
         } else {
             dnfCounter = dnfCounter + 1
         }
     }
+    for (let i = 0; i < 5; i++) {
+        ao5_sum += ao5_values[i]
+    }
+    ao5_sum = ao5_sum - Math.min(...ao5_values) - Math.max(...ao5_values)
+    for (let i = 0; i < 12; i++) {
+        ao12_sum += ao12_values[i]
+    }
+    ao12_values.sort()
+    ao12_sum = ao12_sum - Math.min(...ao12_values) - Math.max(...ao12_values) - ao12_values[1] - ao12_values[ao12_values.length - 2]
     if (sessionTimes.length == dnfCounter) {
-        average_text.innerText = "Session average: DNF"
+        average_text.innerText = "Overall: DNF"
     } else {
         average = (Math.round(sum / (sessionTimes.length - dnfCounter) * 100) / 100).toFixed(2)
-        average_text.innerText = 'Session average: ' + average
+        average_text.innerText = 'Overall: ' + average
+    }
+    if (sessionTimes.length >= 3) {
+        mo3 = (Math.round(mo3_sum / 3 * 100) / 100).toFixed(2)
+        mo3_text.innerText = "mo3: " + mo3
+    }
+    if (sessionTimes.length >= 5) {
+        ao5 = (Math.round(ao5_sum / 3 * 100) / 100).toFixed(2)
+        ao5_text.innerText = "ao5: " + ao5
+    }
+    if (sessionTimes.length >= 12) {
+        ao12 = (Math.round(ao12_sum / 10 * 100) / 100).toFixed(2)
+        ao12_text.innerText = "ao12: " + ao12
     }
 }
 

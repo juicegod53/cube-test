@@ -132,12 +132,12 @@ footer {
 
 #times-container {
     height: 30vh;
-    width: 500px;
+    width: 50%;
     overflow-y: scroll;
 }
 
 #times-container::-webkit-scrollbar {
-    background-color: grey;
+    background-color: rgb(48, 48, 48);
     border-radius: 20px;
 }
 
@@ -148,17 +148,11 @@ footer {
     width: 5px;
 }
 
-#average-text {
-    margin-bottom: 30px;
-    text-align: center;
-    font-size: 24px;
-}
-
 #times {
     font-size: 20px;
 }
 
-#timer-alg, #times-container, #average-text, #puzzles {
+#timer-alg, #times-container, #average-text, #puzzles, #ao5-text, #ao12-text, #mo3-text {
     opacity: 1;
     transition: 0.5s opacity;
 }
@@ -207,4 +201,26 @@ button {
 
 button:hover {
     text-shadow: 0 0 5px white;
+}
+
+#display {
+    display: flex;
+}
+
+#stats-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#average-text, #ao5-text, #ao12-text, #mo3-text {
+    font-size: 22px;
+    background-color: rgb(44, 44, 44);
+    border-bottom: 4px solid rgb(27, 26, 26);
+    width: 90%;
+    border-radius: 12px;
+    padding: 15px 0;
+    text-align: center;
 }
