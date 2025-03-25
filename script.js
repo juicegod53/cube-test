@@ -158,10 +158,14 @@ function updateTimesShown() {
     dnfButton = document.createElement("button")
     dnfButton.addEventListener("click", dnf)
     dnfButton.innerText = 'DNF'
+    removeButton = document.createElement("button")
+    removeButton.addEventListener("click", removeTime)
+    removeButton.innerText = 'X'
     timeItemText.innerText = sessionTimes.length + '. ' +sessionTimes[sessionTimes.length - 1][0].toFixed(2)
     timeItem.append(timeItemText)
     timeItemButtons.append(plusTwoButton)
     timeItemButtons.append(dnfButton)
+    timeItemButtons.append(removeButton)
     timeItem.append(timeItemButtons)
     times.prepend(timeItem)
 }
@@ -216,6 +220,25 @@ function dnf(e) {
     }
     updateSessionAverage()
     dnfButton.blur()
+}
+
+function removeTime(e) {
+    const timeItem = e.target.parentNode.parentNode;
+    const times = e.target.parentNode.parentNode.parentNode;
+    const timeItemText = timeItem.childNodes[0]
+    const removedPosition = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
+    for (let i = times.childNodes.length-parseInt(removedPosition)-1; i >= 0; i--) {
+        const timeItemText = times.childNodes[i].childNodes[0];
+        const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
+        const time = timeItemText.innerText.substring(timeItemText.innerText.indexOf(".")+2)
+        const newPosition = parseInt(position) - 1
+        timeItemText.innerText = newPosition + ". " + time
+    }
+    timeItem.remove()
+    const value = sessionTimes[parseInt(removedPosition)-1]
+    sessionTimes = sessionTimes.filter(item => item !== value)
+    console.log(sessionTimes)
+    updateSessionAverage()
 }
 
 generate_alg(puzzle)
