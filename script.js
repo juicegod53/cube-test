@@ -170,7 +170,7 @@ function updateSessionAverage() {
         ao12_sum += ao12_values[i]
     }
     ao12_values.sort()
-    ao12_sum = ao12_sum - Math.min(...ao12_values) - Math.max(...ao12_values) - ao12_values[1] - ao12_values[ao12_values.length - 2]
+    ao12_sum = ao12_sum - Math.min(...ao12_values) - Math.max(...ao12_values) - ao12_values[1] - ao12_values[10]
     if (sessionTimes.length == dnfCounter) {
         average_text.innerText = "Overall: DNF"
     } else {
@@ -186,7 +186,7 @@ function updateSessionAverage() {
         ao5_text.innerText = "ao5: " + ao5
     }
     if (sessionTimes.length >= 12) {
-        ao12 = (Math.round(ao12_sum / 10 * 100) / 100).toFixed(2)
+        ao12 = (Math.round(ao12_sum / 8 * 100) / 100).toFixed(2)
         ao12_text.innerText = "ao12: " + ao12
     }
 }
@@ -226,7 +226,6 @@ function plusTwo(e) {
         const newTime = (Math.round((time + 2) * 100) / 100)
         const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
         sessionTimes[parseInt(position)-1][0] = newTime
-        console.log(sessionTimes)
         timeItemText.innerText = position + ". " + newTime.toFixed(2) + " (+2)"
     } else {
         const time = parseFloat(timeItemText.innerText.substring(timeItemText.innerText.indexOf(".")+2))
@@ -281,7 +280,6 @@ function removeTime(e) {
     timeItem.remove()
     const value = sessionTimes[parseInt(removedPosition)-1]
     sessionTimes = sessionTimes.filter(item => item !== value)
-    console.log(sessionTimes)
     updateSessionAverage()
 }
 
