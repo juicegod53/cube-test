@@ -143,6 +143,7 @@ function updateSessionAverage() {
     let mo3_sum = 0;
     let ao5_sum = 0;
     let ao12_sum = 0;
+    let mo3_dnf = false;
     let dnfCounter = 0;
     let ao5_values = []
     let ao12_values = []
@@ -159,6 +160,9 @@ function updateSessionAverage() {
             }
             sum += sessionTimes[i][0]
         } else {
+            if (i >= sessionTimes.length - 3) {
+                mo3_dnf = true
+            }
             dnfCounter = dnfCounter + 1
         }
     }
@@ -195,7 +199,11 @@ function updateSessionAverage() {
         average_text.innerText = 'Overall: ' + average
     }
     if (sessionTimes.length >= 3) {
-        mo3 = (Math.round(mo3_sum / 3 * 100) / 100).toFixed(2)
+        if (mo3_dnf == false) {
+            mo3 = (Math.round(mo3_sum / 3 * 100) / 100).toFixed(2)
+        } else {
+            mo3 = "DNF"
+        }
         mo3_text.innerText = "mo3: " + mo3
     }
     if (sessionTimes.length >= 5) {
