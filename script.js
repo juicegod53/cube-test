@@ -162,15 +162,32 @@ function updateSessionAverage() {
             dnfCounter = dnfCounter + 1
         }
     }
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < ao5_values.length; i++) {
         ao5_sum += ao5_values[i]
     }
-    ao5_sum = ao5_sum - Math.min(...ao5_values) - Math.max(...ao5_values)
-    for (let i = 0; i < 12; i++) {
+    ao5_values.sort()
+
+    if (ao5_values.length == 5) {
+        ao5_sum = ao5_sum - ao5_values[0] - ao5_values[4]
+    } else if (ao5_values.length == 4) {
+        ao5_sum = ao5_sum - ao5_values[0]
+    } else if (ao5_values.length <= 3) {
+        ao5 = "DNF"
+    }
+
+    for (let i = 0; i < ao12_values.length; i++) {
         ao12_sum += ao12_values[i]
     }
     ao12_values.sort()
-    ao12_sum = ao12_sum - Math.min(...ao12_values) - Math.max(...ao12_values) - ao12_values[1] - ao12_values[10]
+
+    if (ao12_values.length == 11) {
+        ao12_sum = ao12_sum - ao12_values[0] - ao12_values[1] - ao12_values[10]
+    } else if (ao12_values.length <= 10) {
+        ao12 = "DNF"
+    } else if (ao12_values.length == 12) {
+        ao12_sum = ao12_sum - ao12_values[0] - ao12_values[11] - ao12_values[1] - ao12_values[10]
+    }
+
     if (sessionTimes.length == dnfCounter) {
         average_text.innerText = "Overall: DNF"
     } else {
@@ -182,11 +199,15 @@ function updateSessionAverage() {
         mo3_text.innerText = "mo3: " + mo3
     }
     if (sessionTimes.length >= 5) {
-        ao5 = (Math.round(ao5_sum / 3 * 100) / 100).toFixed(2)
+        if (ao5_values.length >= 4) {
+            ao5 = (Math.round(ao5_sum / 3 * 100) / 100).toFixed(2)
+        }
         ao5_text.innerText = "ao5: " + ao5
     }
     if (sessionTimes.length >= 12) {
-        ao12 = (Math.round(ao12_sum / 8 * 100) / 100).toFixed(2)
+        if (ao12_values.length >= 11) {
+            ao12 = (Math.round(ao12_sum / 8 * 100) / 100).toFixed(2)
+        }
         ao12_text.innerText = "ao12: " + ao12
     }
 }
