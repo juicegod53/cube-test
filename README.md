@@ -5,9 +5,10 @@
 - Add scramble generation for all WCA puzzle variants, NxN first, then others
 - Implement feature to save session times with local storage
 ## Timer
-![Timer](https://github.com/user-attachments/assets/638b4eca-fef9-48c3-8152-3ea3df5923df)
-- Scramble generation for 2 puzzle options (2x2, 3x3)
+![image](https://github.com/user-attachments/assets/38c37ab7-72b2-47a4-a2ce-001fdcb8457f)
+- Scramble generation (2x2, 3x3)
 - Session time tracking
+- Timer statistics
 ## Algorithms
 ### 3x3
 - 2-Look OLL
