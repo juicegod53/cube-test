@@ -5,6 +5,16 @@ let average_text = document.getElementById("average-text")
 let ao5_text = document.getElementById("ao5-text")
 let ao12_text = document.getElementById("ao12-text")
 let mo3_text = document.getElementById("mo3-text")
+let average_text_pb = document.getElementById("average-text-pb")
+let ao5_text_pb = document.getElementById("ao5-text-pb")
+let ao12_text_pb = document.getElementById("ao12-text-pb")
+let mo3_text_pb = document.getElementById("mo3-text-pb")
+let stats_current_header = document.getElementById("stats-current-header")
+let stats_current_pb = document.getElementById("stats-current-pb")
+let pb_mo3 = 999999;
+let pb_ao5 = 999999;
+let pb_ao12 = 999999;
+let pb_average = 999999;
 let times_container = document.getElementById("times-container")
 let puzzles = document.getElementById("puzzles")
 let sessionTimes = [];
@@ -106,24 +116,25 @@ function delay(event) {
     }
 }
 
+let components = [alg_text, average_text, times_container, puzzles, ao5_text, ao12_text, mo3_text, ao5_text_pb, ao12_text_pb, mo3_text_pb, average_text_pb, stats_current_header, stats_current_pb]
+
+for (let i = 0; i < components.length; i++) {
+    components[i].style.opacity = '1'
+    components[i].style.transition = '0.5s opacity'
+}
+
 function hide() {
-    alg_text.style.opacity = '0'
-    average_text.style.opacity = '0'
-    times_container.style.opacity = '0'
-    puzzles.style.opacity = '0'
-    ao5_text.style.opacity = '0'
-    ao12_text.style.opacity = '0'
-    mo3_text.style.opacity = '0'
+    for (let i = 0; i < components.length; i++) {
+        components[i].style.opacity = '0'
+    }
+    document.body.style.pointerEvents = 'none';
 }
 
 function show() {
-    alg_text.style.opacity = '1'
-    average_text.style.opacity = '1'
-    times_container.style.opacity = '1'
-    puzzles.style.opacity = '1'
-    ao5_text.style.opacity = '1'
-    ao12_text.style.opacity = '1'
-    mo3_text.style.opacity = '1'
+    for (let i = 0; i < components.length; i++) {
+        components[i].style.opacity = '1'
+    }
+    document.body.style.pointerEvents = 'auto';
 }
 
 function updateTimer() {
@@ -201,6 +212,10 @@ function updateSessionAverage() {
     if (sessionTimes.length >= 3) {
         if (mo3_dnf == false) {
             mo3 = (Math.round(mo3_sum / 3 * 100) / 100).toFixed(2)
+            if (mo3 < pb_mo3) {
+                pb_mo3 = mo3
+                mo3_text_pb.innerText = "mo3: " + mo3
+            }
         } else {
             mo3 = "DNF"
         }
@@ -209,12 +224,20 @@ function updateSessionAverage() {
     if (sessionTimes.length >= 5) {
         if (ao5_values.length >= 4) {
             ao5 = (Math.round(ao5_sum / 3 * 100) / 100).toFixed(2)
+            if (ao5 < pb_ao5) {
+                pb_ao5 = ao5
+                ao5_text_pb.innerText = "ao5: " + ao5
+            }
         }
         ao5_text.innerText = "ao5: " + ao5
     }
     if (sessionTimes.length >= 12) {
         if (ao12_values.length >= 11) {
             ao12 = (Math.round(ao12_sum / 8 * 100) / 100).toFixed(2)
+            if (ao12 < pb_ao12) {
+                pb_ao12 = ao12
+                ao12_text_pb.innerText = "ao12: " + ao12
+            }
         }
         ao12_text.innerText = "ao12: " + ao12
     }

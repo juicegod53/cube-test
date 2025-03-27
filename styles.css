@@ -152,11 +152,6 @@ footer {
     font-size: 20px;
 }
 
-#timer-alg, #times-container, #average-text, #puzzles, #ao5-text, #ao12-text, #mo3-text {
-    opacity: 1;
-    transition: 0.5s opacity;
-}
-
 .time-item {
     display: flex;
     align-items: center;
@@ -210,12 +205,12 @@ button:hover {
 #stats-container {
     width: 50%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
 }
 
-#average-text, #ao5-text, #ao12-text, #mo3-text {
+#average-text, #ao5-text, #ao12-text, #mo3-text, #average-text-pb, #ao5-text-pb, #ao12-text-pb, #mo3-text-pb {
     font-size: 22px;
     background-color: rgb(44, 44, 44);
     border-bottom: 4px solid rgb(27, 26, 26);
@@ -223,4 +218,13 @@ button:hover {
     border-radius: 12px;
     padding: 15px 0;
     text-align: center;
+}
+
+#stats-container-pb, #stats-container-current {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+    gap: 8px;
 }
