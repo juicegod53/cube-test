@@ -20,6 +20,7 @@ let puzzles = document.getElementById("puzzles")
 let sessionTimes = [];
 let keytrigger = "keyup";
 let puzzle = "3x3";
+let fetchedTimes = localStorage.getItem('sessionTimes')
 
 let times = document.getElementById("times")
 
@@ -96,6 +97,10 @@ function calculateTime(event) {
             finishTime = new Date
             timeTaken = Math.round(((finishTime - startTime) * 0.001) * 100) / 100
             timeTakenString = timeTaken.toFixed(2)
+            if (event.key == "Escape") {
+                timeTaken = "(DNF) " + timeTaken
+                timeTakenString = timeTaken
+            }
             active = false
             updateSessionTimes(timeTaken, alg_text.innerText, puzzle)
             timer_text.innerText = timeTakenString
@@ -207,6 +212,10 @@ function updateSessionAverage() {
         average_text.innerText = "Overall: DNF"
     } else {
         average = (Math.round(sum / (sessionTimes.length - dnfCounter) * 100) / 100).toFixed(2)
+        if (average < pb_average && sessionTimes.length >= 50) {
+            pb_average = average
+            average_text_pb.innerText = "Overall: " + average
+        }
         average_text.innerText = 'Overall: ' + average
     }
     if (sessionTimes.length >= 3) {
@@ -257,7 +266,11 @@ function updateTimesShown() {
     removeButton = document.createElement("button")
     removeButton.addEventListener("click", removeTime)
     removeButton.innerText = 'X'
-    timeItemText.innerText = sessionTimes.length + '. ' +sessionTimes[sessionTimes.length - 1][0].toFixed(2)
+    let time = sessionTimes[sessionTimes.length - 1][0]
+    if (typeof(time) == "number") {
+        time = time.toFixed(2)
+    }
+    timeItemText.innerText = sessionTimes.length + '. ' +time
     timeItem.append(timeItemText)
     timeItemButtons.append(plusTwoButton)
     timeItemButtons.append(dnfButton)
@@ -288,6 +301,7 @@ function plusTwo(e) {
     }
     updateSessionAverage()
     plusTwoButton.blur()
+    localStorage.setItem("sessionTimes", JSON.stringify(sessionTimes))
 }
 
 function dnf(e) {
@@ -347,4 +361,5 @@ function set_puzzle() {
         generate_alg(new_puzzle)
         puzzle = new_puzzle
     }
+
 }
