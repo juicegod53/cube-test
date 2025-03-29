@@ -32,48 +32,66 @@ function generate_alg(puzzle) {
     let move_double;
     let last_two_moves = [];
     let last_two_moves_store = "";
-    let move_count = 19;
 
     if (puzzle == "3x3") {
-        move_count = 19;
-    } else if (puzzle == "2x2") {
-        move_count = 9;
-    }
-
-    for (let x = 0; x < move_count; x++) {
-        let move = moves[Math.floor(Math.random()*moves.length)];
-        if (algorithm.length >= 2) {
-            last_two_moves = algorithm.slice(Math.max(algorithm.length - 2, 0));
-            for (let y = 0; y < 2; y++) {
-                last_two_moves[y] = (last_two_moves[y]).charAt(0)
+        for (let x = 0; x < 19; x++) {
+            let move = moves[Math.floor(Math.random()*moves.length)];
+            if (algorithm.length >= 2) {
+                last_two_moves = algorithm.slice(Math.max(algorithm.length - 2, 0));
+                for (let y = 0; y < 2; y++) {
+                    last_two_moves[y] = (last_two_moves[y]).charAt(0)
+                }
             }
-        }
 
-        last_two_moves_store = last_two_moves.slice()
-        last_two_moves.sort()
+            last_two_moves_store = last_two_moves.slice()
+            last_two_moves.sort()
 
-        let exists = last_move_checks.some(subArray => 
-            subArray.length === last_two_moves.length && subArray.every((val, i) => val === last_two_moves[i])
-        );
-        
-        if (exists) {
-            move_double = last_two_moves_store[0]
-        } else {
-            move_double = "none"
-        }
-        
-        while ((move == last_move_axis) || ((move == move_double) && (move_double != "none"))) {
-            move = moves[Math.floor(Math.random()*moves.length)];
-        }
-        last_move_axis = move
-        let y = Math.floor((Math.random() * 3) + 1);
-        if (y == 2) {
-            move += "2"
-        } else if (y == 3) {
-            move += "'"
-        }
+            let exists = last_move_checks.some(subArray => 
+                subArray.length === last_two_moves.length && subArray.every((val, i) => val === last_two_moves[i])
+            );
+            
+            if (exists) {
+                move_double = last_two_moves_store[0]
+            } else {
+                move_double = "none"
+            }
+            
+            while ((move == last_move_axis) || ((move == move_double) && (move_double != "none"))) {
+                move = moves[Math.floor(Math.random()*moves.length)];
+            }
+            last_move_axis = move
+            let y = Math.floor((Math.random() * 3) + 1);
+            if (y == 2) {
+                move += "2"
+            } else if (y == 3) {
+                move += "'"
+            }
 
-        algorithm.push(move)
+            algorithm.push(move)
+        }
+    } else if (puzzle == "2x2") {
+        for (let x = 0; x < 10; x++) {
+            let move = moves[Math.floor(Math.random()*moves.length)];
+            let last_move_checks_2x2 = [["L", "U", "F"], ["R", "D", "B"]]
+            if (last_move_checks_2x2[0].includes(last_move_axis)) {
+                last_move_check_2x2 = last_move_checks_2x2[1][last_move_checks_2x2[0].indexOf(last_move_axis)]
+            } else {
+                last_move_check_2x2 = last_move_checks_2x2[0][last_move_checks_2x2[1].indexOf(last_move_axis)]
+            }
+            while (move == last_move_axis || move == last_move_check_2x2) {
+                move = moves[Math.floor(Math.random()*moves.length)];
+            }
+            last_move_axis = move
+
+            let y = Math.floor((Math.random() * 3) + 1);
+            if (y == 2) {
+                move += "2"
+            } else if (y == 3) {
+                move += "'"
+            }
+
+            algorithm.push(move)
+        }
     }
     alg_text.innerText = algorithm.join(" ")
 }
@@ -163,6 +181,7 @@ function updateSessionAverage() {
     let dnfCounter = 0;
     let ao5_values = []
     let ao12_values = []
+
     for (let i = 0; i < sessionTimes.length; i++) {
         if (typeof(sessionTimes[i][0]) == "number") {
             if (i >= sessionTimes.length - 3) {
@@ -185,6 +204,7 @@ function updateSessionAverage() {
     for (let i = 0; i < ao5_values.length; i++) {
         ao5_sum += ao5_values[i]
     }
+    
     ao5_values.sort()
 
     if (ao5_values.length == 5) {
@@ -233,10 +253,10 @@ function updateSessionAverage() {
     if (sessionTimes.length >= 5) {
         if (ao5_values.length >= 4) {
             ao5 = (Math.round(ao5_sum / 3 * 100) / 100).toFixed(2)
-            if (ao5 < pb_ao5) {
-                pb_ao5 = ao5
-                ao5_text_pb.innerText = "ao5: " + ao5
-            }
+        }
+        if (ao5 < pb_ao5) {
+            pb_ao5 = ao5
+            ao5_text_pb.innerText = "ao5: " + ao5
         }
         ao5_text.innerText = "ao5: " + ao5
     }
@@ -249,6 +269,15 @@ function updateSessionAverage() {
             }
         }
         ao12_text.innerText = "ao12: " + ao12
+    }
+    if (sessionTimes.length < 3) {
+        mo3_text.innerText = "mo3: -"
+    }
+    if (sessionTimes.length < 5) {
+        ao5_text.innerText = "ao5: -"
+    }
+    if (sessionTimes.length < 12) {
+        ao12_text.innerText = "ao12: -"
     }
 }
 
