@@ -20,9 +20,41 @@ let puzzles = document.getElementById("puzzles")
 let sessionTimes = [];
 let keytrigger = "keyup";
 let puzzle = "3x3";
-let fetchedTimes = localStorage.getItem('sessionTimes')
 
-let times = document.getElementById("times")
+let fetchedTimes = localStorage.getItem('sessionTimes')
+if (fetchedTimes.length > 0) {
+    sessionTimes = JSON.parse(fetchedTimes)
+    console.log(sessionTimes)
+    if (sessionTimes.length >= 3) {
+        mo3 = localStorage.getItem("mo3")
+        pb_mo3 = localStorage.getItem("pb_mo3");
+        mo3_text.innerText = "mo3: " + mo3
+        mo3_text_pb.innerText = "mo3: " + pb_mo3
+    }
+    if (sessionTimes.length >= 5) {
+        ao5 = localStorage.getItem("ao5")
+        pb_ao5 = localStorage.getItem("pb_ao5");
+        ao5_text.innerText = "ao5: " + ao5
+        ao5_text_pb.innerText = "ao5: " + pb_ao5
+    }
+    if (sessionTimes.length >= 12) {
+        ao12 = localStorage.getItem("ao12")
+        pb_ao12 = localStorage.getItem("pb_ao12");
+        ao12_text.innerText = "ao12: " + ao12
+        ao12_text_pb.innerText = "ao12: " + pb_ao12
+    }
+    average = localStorage.getItem("average")
+    average_text.innerText = "Overall: " + average
+    if (sessionTimes.length >= 50) {
+        pb_average = localStorage.getItem("pb_average");
+        average_text_pb.innerText = "Overall: " + pb_average
+    }
+
+    for (let i = 0; i < sessionTimes.length; i++) {
+        updateTimesShown(true, i)
+    }
+    
+}
 
 function generate_alg(puzzle) {
     const moves = ["L", "R", "B", "F", "D", "U"];
@@ -235,8 +267,12 @@ function updateSessionAverage() {
         if (average < pb_average && sessionTimes.length >= 50) {
             pb_average = average
             average_text_pb.innerText = "Overall: " + average
+            localStorage.setItem("pb_average", pb_average)
         }
         average_text.innerText = 'Overall: ' + average
+
+    localStorage.setItem("average", average)
+
     }
     if (sessionTimes.length >= 3) {
         if (mo3_dnf == false) {
@@ -244,11 +280,15 @@ function updateSessionAverage() {
             if (mo3 < pb_mo3) {
                 pb_mo3 = mo3
                 mo3_text_pb.innerText = "mo3: " + mo3
+                localStorage.setItem("pb_mo3", pb_mo3)
             }
         } else {
             mo3 = "DNF"
         }
         mo3_text.innerText = "mo3: " + mo3
+        localStorage.setItem("mo3", mo3)
+    } else {
+        mo3_text.innerText = "mo3: -"
     }
     if (sessionTimes.length >= 5) {
         if (ao5_values.length >= 4) {
@@ -257,8 +297,12 @@ function updateSessionAverage() {
         if (ao5 < pb_ao5) {
             pb_ao5 = ao5
             ao5_text_pb.innerText = "ao5: " + ao5
+            localStorage.setItem("pb_ao5", pb_ao5)
         }
         ao5_text.innerText = "ao5: " + ao5
+        localStorage.setItem("ao5", ao5)
+    } else {
+        ao5_text.innerText = "ao5: -"
     }
     if (sessionTimes.length >= 12) {
         if (ao12_values.length >= 11) {
@@ -266,22 +310,17 @@ function updateSessionAverage() {
             if (ao12 < pb_ao12) {
                 pb_ao12 = ao12
                 ao12_text_pb.innerText = "ao12: " + ao12
+                localStorage.setItem("pb_ao12", pb_ao12)
             }
         }
         ao12_text.innerText = "ao12: " + ao12
-    }
-    if (sessionTimes.length < 3) {
-        mo3_text.innerText = "mo3: -"
-    }
-    if (sessionTimes.length < 5) {
-        ao5_text.innerText = "ao5: -"
-    }
-    if (sessionTimes.length < 12) {
+        localStorage.setItem("ao12", ao12)
+    } else {
         ao12_text.innerText = "ao12: -"
     }
 }
 
-function updateTimesShown() {
+function updateTimesShown(initialize = false, i = -1) {
     const timeItem = document.createElement("li")
     timeItem.className = "time-item"
     const timeItemText = document.createElement("p")
@@ -296,16 +335,25 @@ function updateTimesShown() {
     removeButton.addEventListener("click", removeTime)
     removeButton.innerText = 'X'
     let time = sessionTimes[sessionTimes.length - 1][0]
-    if (typeof(time) == "number") {
-        time = time.toFixed(2)
+    if (!initialize) {
+        if (typeof(time) == "number") {
+            time = time.toFixed(2)
+        }
+        timeItemText.innerText = sessionTimes.length + '. ' +time
+    } else {
+        time = sessionTimes[i][0]
+        if (typeof(time) == "number") {
+            time = time.toFixed(2)
+        }
+        timeItemText.innerText = (i+1) + '. ' +time
     }
-    timeItemText.innerText = sessionTimes.length + '. ' +time
     timeItem.append(timeItemText)
     timeItemButtons.append(plusTwoButton)
     timeItemButtons.append(dnfButton)
     timeItemButtons.append(removeButton)
     timeItem.append(timeItemButtons)
     times.prepend(timeItem)
+    localStorage.setItem("sessionTimes", JSON.stringify(sessionTimes))
 }
 
 function plusTwo(e) {
@@ -358,6 +406,7 @@ function dnf(e) {
     }
     updateSessionAverage()
     dnfButton.blur()
+    localStorage.setItem("sessionTimes", JSON.stringify(sessionTimes))
 }
 
 function removeTime(e) {
@@ -376,6 +425,7 @@ function removeTime(e) {
     const value = sessionTimes[parseInt(removedPosition)-1]
     sessionTimes = sessionTimes.filter(item => item !== value)
     updateSessionAverage()
+    localStorage.setItem("sessionTimes", JSON.stringify(sessionTimes))
 }
 
 generate_alg(puzzle)
@@ -391,4 +441,10 @@ function set_puzzle() {
         puzzle = new_puzzle
     }
 
+}
+
+function clearTimes() {
+    sessionTimes = []
+    localStorage.setItem("sessionTimes",[])
+    times.innerHTML = '';
 }
