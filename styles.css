@@ -228,3 +228,10 @@ button:hover {
     align-items: center;
     gap: 8px;
 }
+
+#clear-times {
+    width: 20%;
+    margin: auto;
+    height: 50px;
+    background-color: rgb(44, 44, 44);
+}

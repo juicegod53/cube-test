@@ -20,6 +20,7 @@ let puzzles = document.getElementById("puzzles")
 let sessionTimes = [];
 let keytrigger = "keyup";
 let puzzle = "3x3";
+let clear_times_button = document.getElementById("clear-times")
 
 let fetchedTimes = localStorage.getItem('sessionTimes')
 if (fetchedTimes && fetchedTimes.length > 0) {
@@ -171,7 +172,7 @@ function delay(event) {
     }
 }
 
-let components = [alg_text, average_text, times_container, puzzles, ao5_text, ao12_text, mo3_text, ao5_text_pb, ao12_text_pb, mo3_text_pb, average_text_pb, stats_current_header, stats_current_pb]
+let components = [alg_text, average_text, times_container, puzzles, ao5_text, ao12_text, mo3_text, ao5_text_pb, ao12_text_pb, mo3_text_pb, average_text_pb, stats_current_header, stats_current_pb, clear_times_button]
 
 for (let i = 0; i < components.length; i++) {
     components[i].style.opacity = '1'
@@ -443,8 +444,11 @@ function set_puzzle() {
 
 }
 
+clear_times_button.addEventListener("click", clearTimes)
+
 function clearTimes() {
-    sessionTimes = []
+    sessionTimes = []  
     localStorage.setItem("sessionTimes",[])
     times.innerHTML = '';
+    clear_times_button.blur()
 }
