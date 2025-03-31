@@ -22,7 +22,7 @@ let keytrigger = "keyup";
 let puzzle = "3x3";
 
 let fetchedTimes = localStorage.getItem('sessionTimes')
-if (fetchedTimes.length > 0 && fetchedTimes != null) {
+if (fetchedTimes && fetchedTimes.length > 0) {
     sessionTimes = JSON.parse(fetchedTimes)
     console.log(sessionTimes)
     if (sessionTimes.length >= 3) {
