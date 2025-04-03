@@ -25,7 +25,6 @@ let clear_times_button = document.getElementById("clear-times")
 let fetchedTimes = localStorage.getItem('sessionTimes')
 if (fetchedTimes && fetchedTimes.length > 0) {
     sessionTimes = JSON.parse(fetchedTimes)
-    console.log(sessionTimes)
     if (sessionTimes.length >= 3) {
         mo3 = localStorage.getItem("mo3")
         pb_mo3 = localStorage.getItem("pb_mo3");
@@ -50,9 +49,17 @@ if (fetchedTimes && fetchedTimes.length > 0) {
         pb_average = localStorage.getItem("pb_average");
         average_text_pb.innerText = "Overall: " + pb_average
     }
-
+    let dnfCounter = 0
     for (let i = 0; i < sessionTimes.length; i++) {
+        if ((typeof(sessionTimes[i][0])) == "string") {
+            dnfCounter += 1
+        }
         updateTimesShown(true, i)
+    }
+    console.log(dnfCounter)
+    if (dnfCounter == sessionTimes.length) {
+        average = 999999
+        average_text.innerText = "Overall: DNF" 
     }
     
 }
@@ -215,8 +222,6 @@ function updateSessionAverage() {
     let ao5_values = []
     let ao12_values = []
 
-    console.log(sessionTimes)
-
     for (let i = 0; i < sessionTimes.length; i++) {
         if (typeof(sessionTimes[i][0]) == "number") {
             if (i >= sessionTimes.length - 3) {
@@ -263,7 +268,7 @@ function updateSessionAverage() {
         ao12_sum = ao12_sum - ao12_values[0] - ao12_values[11] - ao12_values[1] - ao12_values[10]
     }
 
-    if (sessionTimes.length == dnfCounter) {
+    if (sessionTimes.length == dnfCounter && sessionTimes.length > 0) {
         average_text.innerText = "Overall: DNF"
     } else {
         average = (Math.round(sum / (sessionTimes.length - dnfCounter) * 100) / 100).toFixed(2)
@@ -347,7 +352,6 @@ function updateTimesShown(initialize = false, i = -1) {
         timeItemText.innerText = sessionTimes.length + '. ' +time
     } else {
         time = sessionTimes[i][0]
-        console.log(typeof(time))
         if (typeof(time) == "string") {
             time = "(DNF) " + parseFloat(time.substring(time.indexOf("(")+1,time.indexOf(")"))).toFixed(2)
         } else {
@@ -456,6 +460,11 @@ clear_times_button.addEventListener("click", clearTimes)
 function clearTimes() {
     sessionTimes = []  
     localStorage.setItem("sessionTimes",[])
+    pb_mo3 = pb_ao5 = pb_ao12 = pb_average = 999999
+    pb_times = [mo3_text_pb, ao5_text_pb, ao12_text_pb, average_text_pb]
+    for (let i = 0; i < pb_times.length; i++) {
+        pb_times[i].innerText = pb_times[i].innerText.substring(0, pb_times[i].innerText.indexOf(" ")+1) + "-"
+    }
     times.innerHTML = '';
     clear_times_button.blur()
     updateSessionAverage()
