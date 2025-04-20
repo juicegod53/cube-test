@@ -465,7 +465,8 @@ function clearTimes() {
     for (let i = 0; i < pb_times.length; i++) {
         pb_times[i].innerText = pb_times[i].innerText.substring(0, pb_times[i].innerText.indexOf(" ")+1) + "-"
     }
-    times.innerHTML = '';
+    times.innerHTML = "";
+    timer_text.innerText = "0.00"
     clear_times_button.blur()
     updateSessionAverage()
 }
