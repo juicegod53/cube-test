@@ -371,7 +371,7 @@ function updateTimesShown(initialize = false, i = -1) {
 function plusTwo(e) {
     const timeItem = e.target.parentNode.parentNode;
     const timeItemText = timeItem.childNodes[0]
-    let startOfTime = 3;
+    let startOfTime = timeItemText.innerText.indexOf(".")+2;
     if (timeItemText.innerText.slice(-4) != "(+2)") {
         if (timeItemText.innerText.substring(timeItemText.innerText.indexOf("("),timeItemText.innerText.indexOf(")")+1) == "(DNF)") {
             startOfTime = timeItemText.innerText.indexOf(")") + 2
@@ -398,14 +398,14 @@ function dnf(e) {
     const timeItemText = timeItem.childNodes[0]
     if (timeItemText.innerText.substring(timeItemText.innerText.indexOf("("),timeItemText.innerText.indexOf(")")+1) != "(DNF)") {
         if (timeItemText.innerText.slice(-4) == "(+2)") {
-            const time = parseFloat(timeItemText.innerText.substring(3))
+            const time = parseFloat(timeItemText.innerText.substring(timeItemText.innerText.indexOf(".")+2))
             const newTime = (Math.round((time - 2) * 100) / 100)
             const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
             sessionTimes[parseInt(position)-1][0] = "DNF (" + newTime + ")"
             timeItemText.innerText = position + ". (DNF) " + newTime.toFixed(2)
         } else {
             const position = timeItemText.innerText.substring(0,timeItemText.innerText.indexOf("."))
-            const time = parseFloat(timeItemText.innerText.substring(3))
+            const time = parseFloat(timeItemText.innerText.substring(timeItemText.innerText.indexOf(".")+2))
             timeItemText.innerText = position + ". (DNF) " + time.toFixed(2)
             sessionTimes[parseInt(position)-1][0] = "DNF (" + time + ")"
         }
