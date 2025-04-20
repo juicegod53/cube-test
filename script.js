@@ -29,25 +29,41 @@ if (fetchedTimes && fetchedTimes.length > 0) {
         mo3 = localStorage.getItem("mo3")
         pb_mo3 = localStorage.getItem("pb_mo3");
         mo3_text.innerText = "mo3: " + mo3
-        mo3_text_pb.innerText = "mo3: " + pb_mo3
+        if (pb_mo3 != 999999) {
+            mo3_text_pb.innerText = "mo3: " + pb_mo3
+        } else {
+            mo3_text_pb.innerText = "mo3: -"
+        }
     }
     if (sessionTimes.length >= 5) {
         ao5 = localStorage.getItem("ao5")
         pb_ao5 = localStorage.getItem("pb_ao5");
         ao5_text.innerText = "ao5: " + ao5
-        ao5_text_pb.innerText = "ao5: " + pb_ao5
+        if (pb_ao5 != 999999) {
+            ao5_text_pb.innerText = "ao5: " + pb_ao5
+        } else {
+            ao5_text_pb.innerText = "ao5: -"
+        }
     }
     if (sessionTimes.length >= 12) {
         ao12 = localStorage.getItem("ao12")
         pb_ao12 = localStorage.getItem("pb_ao12");
         ao12_text.innerText = "ao12: " + ao12
-        ao12_text_pb.innerText = "ao12: " + pb_ao12
+        if (pb_ao12 != 999999) {
+            ao12_text_pb.innerText = "ao12: " + pb_ao12
+        } else {
+            ao12_text_pb.innerText = "ao12: -"
+        }
     }
     average = localStorage.getItem("average")
     average_text.innerText = "Overall: " + average
     if (sessionTimes.length >= 50) {
         pb_average = localStorage.getItem("pb_average");
-        average_text_pb.innerText = "Overall: " + pb_average
+        if (pb_average != 999999) {
+            average_text_pb.innerText = "Overall: " + pb_average
+        } else {
+            average_text_pb.innerText = "Overall: -"
+        }
     }
     let dnfCounter = 0
     for (let i = 0; i < sessionTimes.length; i++) {
@@ -56,7 +72,6 @@ if (fetchedTimes && fetchedTimes.length > 0) {
         }
         updateTimesShown(true, i)
     }
-    console.log(dnfCounter)
     if (dnfCounter == sessionTimes.length) {
         average = 999999
         average_text.innerText = "Overall: DNF" 
@@ -327,6 +342,51 @@ function updateSessionAverage() {
         localStorage.setItem("ao12", ao12)
     } else {
         ao12_text.innerText = "ao12: -"
+    }
+    // recheck for pb changes when times are removed
+    if (sessionTimes.length >= 5) {
+        let ao5s = []
+        for (let i = 0; i < sessionTimes.length-4; i++) {
+            let ao5_values = []
+            for (let j = 0; j < 5; j++) {
+                if (typeof(sessionTimes[i+j][0]) == "number") {
+                    ao5_values.push(sessionTimes[i+j][0])
+                } else {
+                    ao5_values.push(999999)
+                }
+            }
+            ao5_values.sort()
+            let sum = ao5_values.reduce((accumulator, current) => {
+                return accumulator + current
+            }, 0)
+            sum = sum - ao5_values[0] - ao5_values[4]
+            let ao5 = Math.round(sum / 3 * 100) / 100
+            if (ao5_values[3] != 999999) {
+                ao5s.push(ao5)
+            }
+        }
+        ao5s.sort()
+        if (ao5s[0] != undefined) {
+            pb_ao5 = ao5s[0]
+            ao5_text_pb.innerText = "ao5: " + pb_ao5.toFixed(2)
+        }
+        else {
+            pb_ao5 = 999999
+            ao5_text_pb.innerText = "ao5: -"
+        }
+    } else {
+        pb_ao5 = 999999
+        ao5_text_pb.innerText = "ao5: -"
+    }
+    localStorage.setItem("pb_ao5", pb_ao5)
+    if (sessionTimes.length >= 3) {
+        // recheck mo3
+    }
+    if (sessionTimes.length >= 12) {
+        // recheck ao12
+    }
+    if (sessionTimes.length >= 50) {
+        // recheck overall
     }
 }
 
