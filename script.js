@@ -413,9 +413,42 @@ function updateSessionAverage() {
         pb_mo3 = 999999
         mo3_text_pb.innerText = "mo3: -"
     }
+    localStorage.setItem("pb_mo3", pb_mo3)
     if (sessionTimes.length >= 12) {
-        // recheck ao12
+        let ao12s = []
+        for (let i = 0; i < sessionTimes.length-11; i++) {
+            let ao12_values = []
+            for (let j = 0; j < 12; j++) {
+                if (typeof(sessionTimes[i+j][0]) == "number") {
+                    ao12_values.push(sessionTimes[i+j][0])
+                } else {
+                    ao12_values.push(999999)
+                }
+            }
+            ao12_values.sort()
+            let sum = ao12_values.reduce((accumulator, current) => {
+                return accumulator + current
+            }, 0)
+            sum = sum - ao12_values[0] - ao12_values[11] - ao12_values[1] - ao12_values[10]
+            let ao12 = Math.round(sum / 8 * 100) / 100
+            if (ao12_values[10] != 999999) {
+                ao12s.push(ao12)
+            }
+        }
+        ao12s.sort()
+        if (ao12s[0] != undefined) {
+            pb_ao12 = ao12s[0]
+            ao12_text_pb.innerText = "ao12: " + pb_ao12.toFixed(2)
+        }
+        else {
+            pb_ao12 = 999999
+            ao12_text_pb.innerText = "ao12: -"
+        }
+    } else {
+        pb_ao12 = 999999
+        ao12_text_pb.innerText = "ao12: -"
     }
+    localStorage.setItem("pb_ao12", pb_ao12)
     if (sessionTimes.length >= 50) {
         // recheck overall
     }
