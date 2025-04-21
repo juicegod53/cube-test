@@ -380,7 +380,38 @@ function updateSessionAverage() {
     }
     localStorage.setItem("pb_ao5", pb_ao5)
     if (sessionTimes.length >= 3) {
-        // recheck mo3
+        let mo3s = []
+        for (let i = 0; i < sessionTimes.length-2; i++) {
+            let mo3_values = []
+            for (let j = 0; j < 3; j++) {
+                if (typeof(sessionTimes[i+j][0]) == "number") {
+                    mo3_values.push(sessionTimes[i+j][0])
+                } else {
+                    mo3 = 999999
+                }
+            }
+            let sum = mo3_values.reduce((accumulator, current) => {
+                return accumulator + current
+            }, 0)
+            if (mo3 != 999999) {
+                mo3 = Math.round(sum / 3 * 100) / 100
+                mo3s.push(mo3)
+            } else {
+                mo3 = 0
+            }
+
+        }
+        mo3s.sort()
+        if (mo3s.length > 0) {
+            pb_mo3 = mo3s[0]
+            mo3_text_pb.innerText = "mo3: " + pb_mo3.toFixed(2)
+        } else {
+            pb_mo3 = 999999
+            mo3_text_pb.innerText = "mo3: -"
+        }
+    } else {
+        pb_mo3 = 999999
+        mo3_text_pb.innerText = "mo3: -"
     }
     if (sessionTimes.length >= 12) {
         // recheck ao12
